@@ -1,0 +1,38 @@
+{
+  "mongodb": [
+    "Connect",
+    "Insert + FindOne",
+    "UpdateOne",
+    "ReplaceOne",
+    "InsertMany + CountDocuments",
+    "Distinct",
+    "FindOneAndUpdate",
+    "FindOneAndDelete",
+    "CreateIndex + verify",
+    "Transactions"
+  ],
+  "postgresql": [
+    "Connect",
+    "INSERT + SELECT",
+    "UPDATE",
+    "Full row replace",
+    "INSERT multiple rows",
+    "SELECT DISTINCT",
+    "UPDATE ... RETURNING",
+    "DELETE ... RETURNING",
+    "CREATE INDEX + verify",
+    "Transaction"
+  ],
+  "redis": [
+    "Connect",
+    "SET + GET",
+    "SET EX + TTL",
+    "INCR + DECR",
+    "APPEND + GET",
+    "LPUSH + LRANGE",
+    "SADD + SMEMBERS",
+    "HSET + HGETALL",
+    "EXISTS + DEL",
+    "Pipeline"
+  ]
+}

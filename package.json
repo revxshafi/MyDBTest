@@ -1,0 +1,34 @@
+{
+  "name": "mydbtest",
+  "version": "2.0.0",
+  "description": "Interactive CLI that tests MongoDB, PostgreSQL, and Redis connections with a structured 10-step suite",
+  "type": "module",
+  "license": "MIT",
+  "author": "Reversal",
+  "keywords": [
+    "mongodb",
+    "postgresql",
+    "redis",
+    "database",
+    "connection-tester",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/revxshafi/mydbtest.git"
+  },
+  "homepage": "https://github.com/revxshafi/mydbtest#readme",
+  "bugs": {
+    "url": "https://github.com/revxshafi/mydbtest/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "mongodb": "7.3.0",
+    "pg": "8.21.0"
+  }
+}
