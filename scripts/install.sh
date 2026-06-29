@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-// MyDBTest global installer for Linux and macOS
+# MyDBTest global installer for Linux and macOS
 
 set -euo pipefail
 
