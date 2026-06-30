@@ -50,7 +50,7 @@ else
   run "cloning into $INSTALL_DIR"
   if ! git clone "$REPO" "$INSTALL_DIR" 2>&1; then
     fail "git clone failed"
-    // remove partial clone for next attempt
+    # remove partial clone for next attempt
     rm -rf "$INSTALL_DIR"
     info "check your internet connection and try again"
     exit 1
@@ -94,7 +94,14 @@ _detect_profile() {
   case "${SHELL:-}" in
     */zsh)  echo "$HOME/.zshrc" ;;
     */fish) echo "$HOME/.config/fish/config.fish" ;;
-    *)      echo "$HOME/.bashrc" ;;
+    *)
+      # Prefer .bashrc if it exists, fall back to .profile (works on Termux/Replit login shells)
+      if [ -f "$HOME/.bashrc" ]; then
+        echo "$HOME/.bashrc"
+      else
+        echo "$HOME/.profile"
+      fi
+      ;;
   esac
 }
 
@@ -152,8 +159,14 @@ set -e
 if [[ "$INSTALLED_VER" == MyDBTest* ]]; then
   ok "$INSTALLED_VER — installed successfully"
   info "you can now run 'mydbtest' from this terminal"
+  info "if a new terminal says 'not found', run: source ~/.bashrc  (or ~/.profile on Termux)"
 else
-  warn "could not verify installation — run 'mydbtest' after updating PATH"
+  warn "could not verify installation — PATH may not be updated yet"
+  info "fix: run this command, then try 'mydbtest' again:"
+  echo ""
+  echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
+  echo ""
+  info "to make it permanent, add that line to ~/.bashrc or ~/.profile"
 fi
 
 echo ""
