@@ -1,7 +1,7 @@
 {
   "name": "mydbtest",
-  "version": "2.0.0",
-  "description": "Interactive CLI that tests MongoDB, PostgreSQL, and Redis connections with a structured 10-step suite",
+  "version": "2.1.0",
+  "description": "Test your database connections against 10 real operations — MongoDB, PostgreSQL and Redis",
   "type": "module",
   "license": "MIT",
   "author": "Reversal",

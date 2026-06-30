@@ -1,6 +1,6 @@
 /**
  * @project     MyDBTest
- * @version     2.0.0
+ * @version     2.1.0
  *
  * @author      Reversal
  * @contributor Resilience
@@ -32,7 +32,7 @@ process.on('SIGINT', () => {
   process.exit(0)
 })
 
-const VERSION  = '2.0.0'
+const VERSION  = '2.1.0'
 const JSON_MODE = process.argv.includes('--json')
 
 // runtime flags passed through from run.sh
@@ -179,6 +179,7 @@ async function runJsonMode() {
   const dbType = DB_MAP[dbArg]
 
   // silence all console output so only the JSON object reaches stdout
+  // will fix this later 
   console.log   = () => {}
   console.error = () => {}
   console.warn  = () => {}

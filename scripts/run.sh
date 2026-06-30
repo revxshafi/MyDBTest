@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-// entry point for Linux/macOS, finds node and execs index.js
+# entry point for Linux/macOS, finds node and execs index.js
 
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-VERSION="2.0.0"
+VERSION="2.1.0"
 NODE_MIN=20
 
 G='\033[32m'; R='\033[31m'; Y='\033[33m'; C='\033[36m'; D='\033[2m'; X='\033[0m'
@@ -84,14 +84,14 @@ except Exception:
 PYEOF
     return
   fi
-  // fallback: strip whitespace, pull path field
+  # fallback: strip whitespace, pull path field
   tr -d '\n\r ' < "$json_file" \
     | grep -o "\"${key}\":{[^}]*}" \
     | grep -o '"path":"[^"]*"' \
     | sed 's/^"path":"//;s/"$//'
 }
 
-// 1. check for private runtime MyDBTest installed
+# check for private runtime installed by MyDBTest
 RUNTIME_JSON="$HOME/.mydbtest/runtime.json"
 NODE_BIN=""
 
@@ -116,7 +116,7 @@ if [ -z "$NODE_BIN" ]; then
   fi
 fi
 
-// report system node (private already announced above)
+# report system node version (private node already announced above)
 if [ "$NODE_BIN" = "node" ]; then
   set +e
   NODE_MAJOR="$(node --version 2>/dev/null | sed 's/v//' | cut -d. -f1)"

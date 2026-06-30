@@ -95,7 +95,6 @@ _detect_profile() {
     */zsh)  echo "$HOME/.zshrc" ;;
     */fish) echo "$HOME/.config/fish/config.fish" ;;
     *)
-      # Prefer .bashrc if it exists, fall back to .profile (works on Termux/Replit login shells)
       if [ -f "$HOME/.bashrc" ]; then
         echo "$HOME/.bashrc"
       else
@@ -143,9 +142,7 @@ if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
       echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
     fi
   else
-    info "add this line to your shell profile:"
-    echo ""
-    echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
+    _patch_path "$PROFILE"
   fi
 
   echo ""
