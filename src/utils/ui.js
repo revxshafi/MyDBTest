@@ -1,6 +1,5 @@
 /**
  * @project     MyDBTest
- * @version     2.0.0
  *
  * @author      Reversal
  * @contributor Resilience
@@ -9,6 +8,9 @@
  */
 
 import readline from 'readline'
+import { readFileSync } from 'fs'
+
+const { version } = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'))
 
 const C = {
   reset:  '\x1b[0m',
@@ -64,7 +66,7 @@ export function printBanner() {
   console.log(cyan('             __/ |'))
   console.log(cyan('            |___/'))
   console.log(cyan(''))
-  console.log(dim('    MyDBTest  —  Database connection & operation tester  —  v2.0.0'))
+  console.log(dim(`    MyDBTest  —  Database connection & operation tester  —  v${version}`))
   console.log(cyan('\n  ─────────────────────────────────────────────\n'))
 }
 

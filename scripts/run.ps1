@@ -2,7 +2,7 @@
 # delegates to run.sh via WSL (preferred) or Git Bash
 # all environment logic lives in run.sh, this is a thin launcher
 
-$VERSION = "2.0.0"
+$VERSION = (Get-Content (Join-Path $PSScriptRoot '..' 'package.json') | ConvertFrom-Json).version
 
 # self-heal: Windows blocks .ps1 by default, relax it and re-launch
 $policy = Get-ExecutionPolicy -Scope CurrentUser

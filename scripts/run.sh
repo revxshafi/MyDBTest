@@ -4,7 +4,9 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-VERSION="2.1.0"
+VERSION="$(python3 -c "import json; print(json.load(open('package.json'))['version'])" 2>/dev/null \
+  || node -e "process.stdout.write(JSON.parse(require('fs').readFileSync('package.json','utf8')).version)" 2>/dev/null \
+  || echo "unknown")"
 NODE_MIN=20
 
 G='\033[32m'; R='\033[31m'; Y='\033[33m'; C='\033[36m'; D='\033[2m'; X='\033[0m'

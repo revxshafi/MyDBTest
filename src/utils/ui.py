@@ -1,6 +1,5 @@
 """
 @project     MyDBTest
-@version     2.0.0
 
 @author      Reversal
 @contributor Resilience
@@ -11,6 +10,11 @@
 import sys
 import time
 import threading
+import json
+import os
+
+_pkg = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'package.json')))
+_VERSION = _pkg['version']
 
 C = {
     'reset':  '\x1b[0m',
@@ -62,7 +66,7 @@ def print_banner():
     print(cyan(r'             __/ |'))
     print(cyan(r'            |___/'))
     print(cyan(''))
-    print(dim('    MyDBTest  —  Database connection & operation tester  —  v2.0.0'))
+    print(dim(f'    MyDBTest  —  Database connection & operation tester  —  v{_VERSION}'))
     print(cyan('\n  ─────────────────────────────────────────────\n'))
 
 # non-TTY => plain static line, \r rewrites would be noise

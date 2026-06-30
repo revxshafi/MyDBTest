@@ -1,6 +1,5 @@
 /**
  * @project     MyDBTest
- * @version     2.1.0
  *
  * @author      Reversal
  * @contributor Resilience
@@ -32,7 +31,7 @@ process.on('SIGINT', () => {
   process.exit(0)
 })
 
-const VERSION  = '2.1.0'
+const VERSION  = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version
 const JSON_MODE = process.argv.includes('--json')
 
 // runtime flags passed through from run.sh

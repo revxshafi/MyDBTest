@@ -1,6 +1,5 @@
 """
 @project     MyDBTest
-@version     2.1.0
 
 @author      Reversal
 @contributor Resilience
@@ -24,7 +23,7 @@ from utils.ui import (
 )
 from utils.runtime import detect_node, detect_python
 
-VERSION = '2.1.0'
+VERSION = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'package.json')))['version']
 ISSUES_URL = 'https://github.com/revxshafi/MyDBTest/issues'
 
 # advanced runtime flags, passed through from CLI
