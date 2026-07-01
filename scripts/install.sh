@@ -90,59 +90,78 @@ else
   fi
 fi
 
-_detect_profile() {
+# Append the PATH export to a single profile file (creating it if needed).
+# Sets PATCHED=1 so the caller knows at least one file changed.
+_patch_file() {
+  local profile="$1"
+
+  mkdir -p "$(dirname "$profile")"
+
+  if grep -qF "$BIN_DIR" "$profile" 2>/dev/null; then
+    info "already configured: $profile"
+    PATCHED=1
+    return
+  fi
+
+  if [[ "$profile" == *config.fish ]]; then
+    printf '\n%s\n' "fish_add_path $BIN_DIR  # added by MyDBTest installer" >> "$profile"
+  else
+    printf '\n%s\n' 'export PATH="$HOME/.local/bin:$PATH"  # added by MyDBTest installer' >> "$profile"
+  fi
+
+  ok "added $BIN_DIR to PATH in $profile"
+  PATCHED=1
+}
+
+# Patch every profile file that the user's shell might read. A LOGIN shell
+# (Termux, macOS Terminal) reads a login profile but NOT .bashrc; an
+# interactive non-login shell (most Linux terminals) reads .bashrc but NOT
+# .profile. To cover both we patch the interactive rc AND the login profile.
+_patch_path() {
   case "${SHELL:-}" in
-    */zsh)  echo "$HOME/.zshrc" ;;
-    */fish) echo "$HOME/.config/fish/config.fish" ;;
+    */zsh)
+      _patch_file "$HOME/.zshrc"                                 # interactive + login zsh
+      [ -f "$HOME/.zprofile" ] && _patch_file "$HOME/.zprofile"
+      ;;
+    */fish)
+      _patch_file "$HOME/.config/fish/config.fish"
+      ;;
     *)
-      if [ -f "$HOME/.bashrc" ]; then
-        echo "$HOME/.bashrc"
+      _patch_file "$HOME/.bashrc"                                # interactive non-login bash
+      # login bash reads the FIRST existing of these — patch that one so we
+      # don't create a .bash_profile that shadows an existing .profile
+      if [ -f "$HOME/.bash_profile" ]; then
+        _patch_file "$HOME/.bash_profile"
+      elif [ -f "$HOME/.bash_login" ]; then
+        _patch_file "$HOME/.bash_login"
       else
-        echo "$HOME/.profile"
+        _patch_file "$HOME/.profile"                             # Termux / macOS login bash
       fi
       ;;
   esac
 }
 
-_patch_path() {
-  local profile="$1"
-  local export_line='export PATH="$HOME/.local/bin:$PATH"'
-
-  if grep -qF "$BIN_DIR" "$profile" 2>/dev/null; then
-    info "$BIN_DIR already in $profile"
-    return
-  fi
-
-  if [[ "$profile" == *config.fish ]]; then
-    mkdir -p "$(dirname "$profile")"
-    echo "" >> "$profile"
-    echo "fish_add_path $BIN_DIR  # added by MyDBTest installer" >> "$profile"
-  else
-    echo "" >> "$profile"
-    echo "$export_line  # added by MyDBTest installer" >> "$profile"
-  fi
-
-  ok "added $BIN_DIR to PATH in $profile"
-  warn "run: source $profile"
-}
-
 if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
   echo ""
   warn "$BIN_DIR is not on your PATH"
-  PROFILE="$(_detect_profile)"
+  PATCHED=0
 
   if [ -t 0 ]; then
-    read -r -p "$(echo -e "  Add it to $PROFILE automatically? [Y/n] ")" reply
+    read -r -p "$(echo -e "  Add it to your shell profile automatically? [Y/n] ")" reply
     reply="${reply:-Y}"
     if [[ "$reply" =~ ^[Yy]$ ]]; then
-      _patch_path "$PROFILE"
-    else
-      info "add this line to your shell profile:"
-      echo ""
-      echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
+      _patch_path
     fi
   else
-    _patch_path "$PROFILE"
+    _patch_path
+  fi
+
+  if [ "$PATCHED" -eq 1 ]; then
+    warn "restart your terminal, or run: source ~/.profile   (or ~/.bashrc / ~/.zshrc)"
+  else
+    info "add this line to your shell profile manually:"
+    echo ""
+    echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
   fi
 
   echo ""
@@ -156,14 +175,16 @@ set -e
 if [[ "$INSTALLED_VER" == MyDBTest* ]]; then
   ok "$INSTALLED_VER — installed successfully"
   info "you can now run 'mydbtest' from this terminal"
-  info "if a new terminal says 'not found', run: source ~/.bashrc  (or ~/.profile on Termux)"
+  info "in THIS terminal, PATH isn't updated yet — open a new terminal, or run:"
+  echo ""
+  echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
 else
   warn "could not verify installation — PATH may not be updated yet"
   info "fix: run this command, then try 'mydbtest' again:"
   echo ""
   echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
   echo ""
-  info "to make it permanent, add that line to ~/.bashrc or ~/.profile"
+  info "to make it permanent, add that line to ~/.bashrc or ~/.profile "
 fi
 
 echo ""
