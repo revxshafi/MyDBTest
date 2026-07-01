@@ -1,6 +1,6 @@
 {
   "name": "mydbtest",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Test your database connections against 10 real operations — MongoDB, PostgreSQL and Redis",
   "type": "module",
   "license": "MIT",
