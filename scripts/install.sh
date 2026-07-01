@@ -97,6 +97,12 @@ _patch_file() {
 
   mkdir -p "$(dirname "$profile")"
 
+  # Skip files that exist but aren't writable (e.g. Nix/Replit read-only symlinks)
+  if [ -e "$profile" ] && [ ! -w "$profile" ]; then
+    info "skipping $profile (read-only)"
+    return
+  fi
+
   if grep -qF "$BIN_DIR" "$profile" 2>/dev/null; then
     info "already configured: $profile"
     PATCHED=1
