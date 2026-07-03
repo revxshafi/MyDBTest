@@ -231,6 +231,8 @@ Connection history and system-wide runtimes installed before MyDBTest are never 
 - Pressing **Escape** at any menu exits cleanly — no stack traces, no partial state
 - **Ctrl+C** is handled gracefully at all points in the session
 
+> **Note from dev:** I'm aware of the major bug in the install command, but I have no intention of fixing it. I might make a v3 of this tool, which will be a dependency for my own projects — I don't really care whether other people use it or not, since I'll be using it for my project the way I want it. Until then, this project might not receive a major update. I'm also new to git, so the commit messages might be a bit off. For miscellaneous notes, check [NOTES.md](https://github.com/revxshafi/MyDBTest/blob/main/NOTES.md).
+
 ---
 
 ## Contributing
